@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOA - 아마추어 축구 팀 관리 앱</title>
+    <meta name="description" content="가장 쉬운 아마추어 축구/풋살 라인업 작성. 자동 배정으로 1초만에 라인업 완성!">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.1);
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(148, 163, 184, 0.2);
+            color: #fff;
+        }
+        .features {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #10b981;
+        }
+        .feature-desc {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MOA</h1>
+        <p>
+            가장 쉬운 아마추어 축구/풋살 라인업 작성<br>
+            자동 배정으로 1초만에 라인업 완성!
+        </p>
+
+        <div class="buttons">
+            <a href="https://apps.apple.com/kr/app/moa/id6739041859" class="btn btn-primary">
+                📱 App Store
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.moasoccer.lineup" class="btn btn-primary">
+                🤖 Google Play
+            </a>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-title">⚡️ 자동 배정</div>
+                <div class="feature-desc">출전 횟수 기반 자동 배치</div>
+            </div>
+            <div class="feature">
+                <div class="feature-title">⚖️ 공정성 관리</div>
+                <div class="feature-desc">선수별 출전시간 추적</div>
+            </div>
+            <div class="feature">
+                <div class="feature-title">📸 이미지 공유</div>
+                <div class="feature-desc">라인업 이미지 저장/공유</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
