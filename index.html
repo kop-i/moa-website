@@ -3,17 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOA — 가장 쉬운 아마추어 축구/풋살 라인업 관리</title>
-  <meta name="description" content="복잡한 라인업 구성, 출전 시간 관리, 경기 기록까지. MOA 하나로 해결하세요." />
 
-  <!-- Open Graph (SNS 미리보기) -->
-  <meta property="og:title" content="MOA — 가장 쉬운 축구/풋살 라인업 관리" />
-  <meta property="og:description" content="아마추어 팀 운영진을 위한 스마트 스쿼드 매니저. 지금 무료로 시작하세요." />
-  <meta property="og:type" content="website" />
+  <!-- ── Primary SEO ──────────────────────────────────────── -->
+  <title>moa — 아마추어 축구·풋살 라인업 자동 관리 앱</title>
+  <meta name="title"       content="moa — 아마추어 축구·풋살 라인업 자동 관리 앱" />
+  <meta name="description" content="매주 경기 전 라인업 짜느라 고생하시나요? moa가 자동 배정부터 출전 시간 관리, 라인업 이미지 공유까지 한 번에 해결합니다. 아마추어 축구·풋살 팀 운영진을 위한 무료 앱." />
+  <meta name="keywords"    content="축구 라인업, 풋살 라인업, 아마추어 축구, 팀 운영, 라인업 관리, 출전 시간 관리, 포메이션, 자동 배정, 축구 앱, 풋살 앱, 선수 관리" />
+  <meta name="author"      content="moa" />
+  <meta name="robots"      content="index, follow" />
+  <link rel="canonical"    href="https://moa-website-weld.vercel.app/" />
 
-  <!-- Google Fonts: Pretendard 대신 시스템 폰트 스택 -->
+  <!-- ── Favicon ──────────────────────────────────────────── -->
+  <link rel="icon"             type="image/svg+xml" href="images/logo.svg" />
+  <link rel="apple-touch-icon"                      href="images/logo.svg" />
+  <meta name="theme-color" content="#0b1120" />
+
+  <!-- ── Open Graph (카카오·페이스북 등 SNS 미리보기) ──────── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://moa-website-weld.vercel.app/" />
+  <meta property="og:site_name"   content="moa" />
+  <meta property="og:locale"      content="ko_KR" />
+  <meta property="og:title"       content="moa — 아마추어 축구·풋살 라인업 자동 관리 앱" />
+  <meta property="og:description" content="매주 경기 전 라인업 짜느라 고생하시나요? moa가 자동 배정부터 출전 시간 관리까지 한 번에 해결합니다. 무료로 시작하세요." />
+  <meta property="og:image"       content="https://moa-website-weld.vercel.app/images/og-image.png" />
+
+  <!-- ── Twitter Card ─────────────────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:url"         content="https://moa-website-weld.vercel.app/" />
+  <meta name="twitter:title"       content="moa — 아마추어 축구·풋살 라인업 자동 관리 앱" />
+  <meta name="twitter:description" content="매주 경기 전 라인업 짜느라 고생하시나요? moa가 자동 배정부터 출전 시간 관리까지 한 번에 해결합니다." />
+  <meta name="twitter:image"       content="https://moa-website-weld.vercel.app/images/og-image.png" />
+
+  <!-- ── Google Fonts ──────────────────────────────────────── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- ── JSON-LD 구조화 데이터 ────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "moa",
+    "alternateName": "모아",
+    "description": "아마추어 축구·풋살 팀 운영진을 위한 라인업 관리 앱. 자동 배정, 출전 시간 관리, 라인업 이미지 공유를 한 번에 해결합니다.",
+    "applicationCategory": "SportsApplication",
+    "operatingSystem": "iOS, Android",
+    "inLanguage": "ko",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "KRW"
+    },
+    "url": "https://moa-website-weld.vercel.app/",
+    "downloadUrl": "https://apps.apple.com/kr/app/moa/id6758687299",
+    "installUrl": "https://play.google.com/store/apps/details?id=com.moasoccer.lineup",
+    "publisher": {
+      "@type": "Organization",
+      "name": "moa",
+      "url": "https://moa-website-weld.vercel.app/"
+    }
+  }
+  </script>
 
   <style>
     /* ─── RESET & BASE ─────────────────────────────────────── */

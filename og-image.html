@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #0b1120;
+      font-family: 'Noto Sans KR', sans-serif;
+      position: relative;
+    }
+
+    /* 배경 글로우 */
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(110px);
+      pointer-events: none;
+    }
+    .glow-green {
+      width: 700px; height: 700px;
+      background: rgba(16,185,129,0.18);
+      top: -240px; left: -180px;
+    }
+    .glow-blue {
+      width: 560px; height: 560px;
+      background: rgba(59,130,246,0.13);
+      bottom: -200px; right: -140px;
+    }
+
+    /* 그리드 */
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* 콘텐츠 */
+    .content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 80px;
+      gap: 60px;
+    }
+
+    /* 좌측 */
+    .left { flex: 1; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #34d399;
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.25);
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 26px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .logo-box {
+      width: 62px; height: 62px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      background: #0b1120;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-box img { width: 62px; height: 62px; object-fit: cover; }
+
+    .app-name {
+      font-size: 46px;
+      font-weight: 900;
+      color: #f1f5f9;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .title {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #f1f5f9;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      word-break: keep-all;
+    }
+
+    .title .accent {
+      background: linear-gradient(135deg, #34d399, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sub {
+      font-size: 17px;
+      color: #94a3b8;
+      line-height: 1.7;
+      margin-bottom: 28px;
+      word-break: keep-all;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: #94a3b8;
+    }
+    .tag.green {
+      color: #34d399;
+      background: rgba(16,185,129,0.1);
+      border-color: rgba(16,185,129,0.25);
+    }
+
+    /* 우측 카드 */
+    .right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-shrink: 0;
+      width: 320px;
+    }
+
+    .card {
+      background: rgba(20, 30, 48, 0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      backdrop-filter: blur(8px);
+    }
+
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot.green { background: #10b981; }
+    .dot.blue  { background: #3b82f6; }
+
+    .card-text .main {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 3px;
+    }
+    .card-text .desc {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* 워터마크 */
+    .watermark {
+      position: absolute;
+      bottom: 24px;
+      right: 80px;
+      font-size: 12px;
+      color: rgba(100,116,139,0.45);
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow glow-green"></div>
+  <div class="glow glow-blue"></div>
+  <div class="grid"></div>
+
+  <div class="content">
+    <div class="left">
+      <div class="badge">⚽ 아마추어 팀 운영진을 위한</div>
+
+      <div class="logo-row">
+        <div class="logo-box">
+          <img src="images/logo.svg" alt="moa" />
+        </div>
+        <span class="app-name">moa</span>
+      </div>
+
+      <h1 class="title">
+        라인업 구성,<br>이제 <span class="accent">1초</span>면 충분해요
+      </h1>
+
+      <p class="sub">
+        자동 배정 · 출전 시간 관리 · 라인업 이미지 공유<br>
+        아마추어 축구·풋살 팀 운영진을 위한 무료 앱
+      </p>
+
+      <div class="tags">
+        <span class="tag green">✓ 무료</span>
+        <span class="tag">iOS · Android</span>
+        <span class="tag">5인 ~ 11인 지원</span>
+        <span class="tag">자동 라인업 배정</span>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <div class="dot green"></div>
+        <div class="card-text">
+          <div class="main">자동 배정 완료!</div>
+          <div class="desc">11명 최적 배치</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="dot green"></div>
+        <div class="card-text">
+          <div class="main">출전 시간 균등 배분</div>
+          <div class="desc">소외되는 팀원 없이</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="dot blue"></div>
+        <div class="card-text">
+          <div class="main">라인업 이미지 공유</div>
+          <div class="desc">탭 한 번에 카톡 전송</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="watermark">moa-website-weld.vercel.app</div>
+</body>
+</html>
