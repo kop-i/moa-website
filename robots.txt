@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://moa-website-weld.vercel.app/sitemap.xml
