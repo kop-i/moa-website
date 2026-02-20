@@ -1,130 +1,1307 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOA - 아마추어 축구 팀 관리 앱</title>
-    <meta name="description" content="가장 쉬운 아마추어 축구/풋살 라인업 작성. 자동 배정으로 1초만에 라인업 완성!">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .container {
-            text-align: center;
-            max-width: 600px;
-        }
-        h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        p {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-        .buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(148, 163, 184, 0.1);
-            color: #94a3b8;
-            border: 1px solid rgba(148, 163, 184, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(148, 163, 184, 0.2);
-            color: #fff;
-        }
-        .features {
-            margin-top: 3rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-        .feature {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .feature-title {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: #10b981;
-        }
-        .feature-desc {
-            font-size: 0.9rem;
-            color: #94a3b8;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOA — 가장 쉬운 아마추어 축구/풋살 라인업 관리</title>
+  <meta name="description" content="복잡한 라인업 구성, 출전 시간 관리, 경기 기록까지. MOA 하나로 해결하세요." />
+
+  <!-- Open Graph (SNS 미리보기) -->
+  <meta property="og:title" content="MOA — 가장 쉬운 축구/풋살 라인업 관리" />
+  <meta property="og:description" content="아마추어 팀 운영진을 위한 스마트 스쿼드 매니저. 지금 무료로 시작하세요." />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts: Pretendard 대신 시스템 폰트 스택 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-base:    #0b1120;
+      --bg-surface: #141e30;
+      --bg-card:    rgba(255,255,255,0.04);
+      --border:     rgba(255,255,255,0.08);
+
+      --green-500:  #10b981;
+      --green-400:  #34d399;
+      --green-600:  #059669;
+      --blue-500:   #3b82f6;
+      --blue-400:   #60a5fa;
+
+      --text-primary:   #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted:     #64748b;
+
+      --radius-sm:  8px;
+      --radius-md:  14px;
+      --radius-lg:  20px;
+      --radius-xl:  28px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY ───────────────────────────────────────── */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-400);
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.25);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      max-width: 560px;
+    }
+
+    /* ─── LAYOUT ───────────────────────────────────────────── */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 96px 0; }
+
+    /* ─── NAV ──────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(11,17,32,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 900; color: #fff;
+    }
+
+    .nav-logo-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: var(--green-500);
+      color: #fff !important;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: background 0.2s, transform 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--green-400) !important; transform: translateY(-1px); }
+
+    .nav-mobile-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      color: var(--text-secondary);
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 배경 글로우 */
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+    }
+    .hero-glow-1 {
+      background: rgba(16,185,129,0.15);
+      top: -100px; left: -100px;
+    }
+    .hero-glow-2 {
+      background: rgba(59,130,246,0.1);
+      bottom: -100px; right: -100px;
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 720px;
+      width: 100%;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--green-400);
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.2);
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    .hero-title .accent {
+      background: linear-gradient(135deg, var(--green-400), var(--blue-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 40px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    /* ─── 다운로드 버튼 ────────────────────────────────────── */
+    .btn-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 22px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1.5px solid transparent;
+    }
+    .btn-store:hover { transform: translateY(-3px); }
+
+    .btn-appstore {
+      background: #fff;
+      color: #0b1120;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .btn-appstore:hover { box-shadow: 0 8px 32px rgba(255,255,255,0.15); }
+
+    .btn-playstore {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
+    .btn-playstore:hover { border-color: rgba(255,255,255,0.2); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+
+    .btn-webver {
+      background: rgba(59,130,246,0.12);
+      color: var(--text-primary);
+      border-color: rgba(59,130,246,0.3);
+    }
+    .btn-webver:hover { border-color: rgba(59,130,246,0.6); box-shadow: 0 8px 24px rgba(59,130,246,0.2); }
+
+    .btn-store-icon { font-size: 1.6rem; line-height: 1; }
+
+    .btn-store-text { text-align: left; }
+    .btn-store-text .sub { font-size: 0.65rem; font-weight: 400; opacity: 0.7; display: block; line-height: 1.2; }
+    .btn-store-text .main { font-size: 0.95rem; font-weight: 700; display: block; }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .stat-divider {
+      width: 1px;
+      background: var(--border);
+    }
+
+    /* 앱 목업 (우측) */
+    .hero-visual {
+      flex: 0 0 320px;
+      position: relative;
+    }
+
+    .phone-mockup {
+      width: 280px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .phone-frame {
+      background: var(--bg-surface);
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 38px;
+      padding: 12px;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .phone-screen {
+      background: #0e1a2b;
+      border-radius: 28px;
+      overflow: hidden;
+      aspect-ratio: 9/19;
+    }
+
+    /* 전술판 목업 SVG 인라인 */
+    .field-mockup {
+      width: 100%;
+      height: 100%;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mock-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .mock-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .mock-tab {
+      font-size: 0.55rem;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .mock-tab.active {
+      background: var(--green-500);
+      color: #fff;
+    }
+
+    .mock-tab.inactive {
+      background: rgba(255,255,255,0.07);
+      color: var(--text-muted);
+    }
+
+    .mock-field {
+      flex: 1;
+      background: linear-gradient(180deg, #0d5e2a 0%, #0a4d22 100%);
+      border-radius: 10px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    /* 필드 라인 */
+    .mock-field::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: 6px;
+    }
+
+    .mock-field::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 40%;
+      aspect-ratio: 1;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: 50%;
+    }
+
+    /* 선수 유니폼 아이콘 */
+    .mock-players {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .mock-player {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .mock-jersey {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.5rem;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .mock-jersey.green { background: var(--green-500); }
+    .mock-jersey.white { background: rgba(255,255,255,0.85); color: #0b1120; }
+
+    .mock-player-name {
+      font-size: 0.42rem;
+      color: rgba(255,255,255,0.8);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .mock-footer {
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 8px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--green-400);
+    }
+
+    /* 플로팅 뱃지 */
+    .float-badge {
+      position: absolute;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      animation: floatY 3s ease-in-out infinite;
+    }
+
+    .float-badge-1 { right: -60px; top: 60px; }
+    .float-badge-2 { left: -60px; bottom: 80px; animation-delay: 1.5s; }
+
+    .float-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green-500);
+      flex-shrink: 0;
+    }
+
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ─── PROBLEM ───────────────────────────────────────────── */
+    #problem {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .problem-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .problem-card:hover { border-color: rgba(255,255,255,0.15); }
+
+    .problem-emoji {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .problem-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .problem-card p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* ─── FEATURES ──────────────────────────────────────────── */
+    #features { background: var(--bg-base); }
+
+    .features-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green-500), var(--blue-500));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius-md);
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .feature-label {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--green-400);
+    }
+
+    /* ─── SCREENSHOTS ───────────────────────────────────────── */
+    #screenshots {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .screenshots-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .screenshots-scroll {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .screenshots-scroll::-webkit-scrollbar { height: 4px; }
+    .screenshots-scroll::-webkit-scrollbar-track { background: transparent; }
+    .screenshots-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .screenshot-item {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .screenshot-phone {
+      width: 200px;
+      background: var(--bg-base);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 10px;
+      box-shadow: 0 20px 48px rgba(0,0,0,0.5);
+    }
+
+    .screenshot-screen {
+      background: #0e1a2b;
+      border-radius: 20px;
+      aspect-ratio: 9/19;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 스크린샷 내부 UI 목업들 */
+    .mock-ui { padding: 12px 10px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .mock-bar { background: rgba(255,255,255,0.07); border-radius: 6px; }
+    .mock-bar.tall { height: 14px; width: 70%; }
+    .mock-bar.short { height: 10px; width: 45%; }
+    .mock-card-ui {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .mock-row { display: flex; gap: 5px; align-items: center; }
+    .mock-avatar { width: 16px; height: 16px; border-radius: 50%; background: var(--green-500); flex-shrink: 0; }
+    .mock-text-sm { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.15); flex: 1; }
+    .mock-text-xs { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); flex: 1; }
+    .mock-green-btn { height: 24px; border-radius: 6px; background: var(--green-500); width: 100%; margin-top: 4px; }
+
+    /* 필드 미니 목업 */
+    .mini-field {
+      flex: 1;
+      background: linear-gradient(180deg, #0d5e2a, #0a4d22);
+      border-radius: 8px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .mini-field::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+    }
+    .mini-player-dot {
+      position: absolute;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+    .mini-player-dot.g { background: var(--green-500); }
+
+    /* 실제 스크린샷 이미지 스타일 */
+    .screenshot-real-img {
+      width: 220px;
+      border-radius: 24px;
+      box-shadow:
+        0 24px 56px rgba(0,0,0,0.55),
+        0 0 0 1px rgba(255,255,255,0.07);
+      display: block;
+      transition: transform 0.2s;
+    }
+    .screenshot-real-img:hover { transform: translateY(-6px) scale(1.02); }
+
+    .screenshot-caption {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* ─── JOIN (CTA) ────────────────────────────────────────── */
+    #join {
+      background: var(--bg-base);
+      text-align: center;
+    }
+
+    .join-header {
+      max-width: 600px;
+      margin: 0 auto 56px;
+    }
+
+    .join-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .join-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 36px 30px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .join-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .join-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .join-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .join-card p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .btn-email {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px 20px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-email-primary {
+      background: linear-gradient(135deg, var(--green-500), var(--green-600));
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+    }
+    .btn-email-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16,185,129,0.4);
+    }
+
+    .btn-email-secondary {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-email-secondary:hover {
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+
+    /* ─── FOOTER ────────────────────────────────────────────── */
+    footer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      padding: 40px 0 32px;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .footer-logo-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; font-weight: 900; color: #fff;
+    }
+
+    .footer-brand {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    .footer-copyright {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .footer-store-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .footer-store-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-primary);
+    }
+
+    /* ─── DIVIDER LINE ─────────────────────────────────────── */
+    .footer-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0 20px;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      section { padding: 64px 0; }
+
+      .nav-links { display: none; }
+      .nav-mobile-btn { display: block; }
+
+      .hero-inner { gap: 0; }
+
+      .features-grid { grid-template-columns: 1fr; }
+
+      .screenshots-scroll { padding-left: 24px; padding-right: 24px; }
+
+      .join-cards { grid-template-columns: 1fr; max-width: 420px; }
+
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2rem; }
+      .btn-store { padding: 11px 16px; }
+    }
+
+    /* ─── FADE-IN ANIMATION ─────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>MOA</h1>
-        <p>
-            가장 쉬운 아마추어 축구/풋살 라인업 작성<br>
-            자동 배정으로 1초만에 라인업 완성!
-        </p>
 
-        <div class="buttons">
-            <a href="https://apps.apple.com/kr/app/moa/id6758687299" class="btn btn-primary">
-                📱 App Store
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.moasoccer.lineup" class="btn btn-primary">
-                🤖 Google Play
-            </a>
-        </div>
+  <!-- ── NAV ─────────────────────────────────────── -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <img
+          src="images/logo.svg"
+          alt="moa 로고"
+          style="width:36px;height:36px;border-radius:10px;object-fit:cover;"
+        />
+        <span class="nav-logo-text">moa</span>
+      </a>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-title">⚡️ 자동 배정</div>
-                <div class="feature-desc">출전 횟수 기반 자동 배치</div>
-            </div>
-            <div class="feature">
-                <div class="feature-title">⚖️ 공정성 관리</div>
-                <div class="feature-desc">선수별 출전시간 추적</div>
-            </div>
-            <div class="feature">
-                <div class="feature-title">📸 이미지 공유</div>
-                <div class="feature-desc">라인업 이미지 저장/공유</div>
-            </div>
-        </div>
+      <ul class="nav-links">
+        <li><a href="#problem">불편함</a></li>
+        <li><a href="#features">기능</a></li>
+        <li><a href="#join" class="nav-cta">팀 합류 / 협업 문의</a></li>
+      </ul>
+
+      <button class="nav-mobile-btn" onclick="toggleMobileMenu()" aria-label="메뉴 열기">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
     </div>
+  </nav>
+
+  <!-- 모바일 메뉴 드로워 -->
+  <div id="mobileMenu" style="
+    display:none; position:fixed; inset:0; z-index:99;
+    background:rgba(11,17,32,0.98); backdrop-filter:blur(16px);
+    flex-direction:column; align-items:center; justify-content:center; gap:32px;
+  ">
+    <button onclick="toggleMobileMenu()" style="position:absolute;top:20px;right:24px;background:none;border:none;cursor:pointer;color:#94a3b8;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <a href="#problem" onclick="toggleMobileMenu()" style="font-size:1.4rem;font-weight:700;color:#f1f5f9;text-decoration:none;">불편함</a>
+    <a href="#features" onclick="toggleMobileMenu()" style="font-size:1.4rem;font-weight:700;color:#f1f5f9;text-decoration:none;">기능</a>
+    <a href="#join" onclick="toggleMobileMenu()" style="font-size:1.2rem;font-weight:700;color:#10b981;text-decoration:none;padding:12px 28px;border:2px solid #10b981;border-radius:12px;">팀 합류 / 협업 문의</a>
+  </div>
+
+  <!-- ── HERO ─────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="container">
+      <div class="hero-inner">
+
+        <div class="hero-content">
+          <div class="hero-badge">⚽ 아마추어 팀 운영진을 위한</div>
+          <h1 class="hero-title">
+            라인업 구성,<br>
+            이제 <span class="accent">1초</span>면 충분해요
+          </h1>
+          <p class="hero-sub">
+            매주 경기 전, 팀원들이 마음껏 뛸 수 있도록<br>
+            혼자 다 챙겨온 운영진분들을 위해 만들었어요.
+          </p>
+
+          <!-- 다운로드 버튼 -->
+          <div class="hero-buttons">
+            <a href="https://apps.apple.com/kr/app/moa/id6758687299"
+               class="btn-store btn-appstore"
+               target="_blank" rel="noopener"
+               aria-label="App Store에서 moa 다운로드">
+              <span class="btn-store-icon">&#63743;</span>
+              <span class="btn-store-text">
+                <span class="sub">Download on the</span>
+                <span class="main">App Store</span>
+              </span>
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.moasoccer.lineup"
+               class="btn-store btn-playstore"
+               target="_blank" rel="noopener"
+               aria-label="Google Play에서 moa 다운로드">
+              <span class="btn-store-icon">&#9654;</span>
+              <span class="btn-store-text">
+                <span class="sub">Get it on</span>
+                <span class="main">Google Play</span>
+              </span>
+            </a>
+            <a href="https://moasoccer.vercel.app/"
+               class="btn-store btn-webver"
+               target="_blank" rel="noopener"
+               aria-label="웹 브라우저에서 moa 사용하기">
+              <span class="btn-store-icon">🌐</span>
+              <span class="btn-store-text">
+                <span class="sub">Use on browser</span>
+                <span class="main">웹에서 사용하기</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat">
+              <span class="stat-value">무료</span>
+              <span class="stat-label">기본 기능 전체 무료</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <span class="stat-value">iOS · Android</span>
+              <span class="stat-label">두 플랫폼 모두 지원</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <span class="stat-value">11가지</span>
+              <span class="stat-label">포메이션 포지션 지원</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROBLEM ──────────────────────────────────── -->
+  <section id="problem">
+    <div class="container">
+      <div class="tag">⚠️ 이런 경험 있으셨나요?</div>
+      <h2 class="section-title">팀 운영, 생각보다 너무 복잡해요</h2>
+      <p class="section-sub">
+        매주 반복되는 라인업 고민, 공평하게 뛰게 하고 싶은데 누가 몇 쿼터를 뛰었는지 기억도 안 나죠.
+      </p>
+
+      <div class="problem-grid">
+        <div class="problem-card fade-in">
+          <span class="problem-emoji">📱</span>
+          <h3>"오늘 참가 인원 누가 오는 거지?"</h3>
+          <p>카카오톡을 위아래로 스크롤하며 한 명씩 체크하고, 메모장에 이름을 옮겨 적는 번거로움.</p>
+        </div>
+        <div class="problem-card fade-in">
+          <span class="problem-emoji">🧩</span>
+          <h3>"포지션별로 어떻게 배치하지?"</h3>
+          <p>포메이션을 종이에 그리거나 머릿속으로 계산하다 결국 포지션이 뒤죽박죽 되어버리는 상황.</p>
+        </div>
+        <div class="problem-card fade-in">
+          <span class="problem-emoji">⚖️</span>
+          <h3>"이 친구 오늘 한 번도 못 뛰었는데..."</h3>
+          <p>출전 시간을 균등하게 나눠주고 싶지만 누가 몇 쿼터 뛰었는지 기억하기가 너무 어렵습니다.</p>
+        </div>
+        <div class="problem-card fade-in">
+          <span class="problem-emoji">📸</span>
+          <h3>"오늘 라인업 카톡에 공유하기 너무 귀찮아"</h3>
+          <p>구성한 라인업을 팀원들에게 보여주려면 따로 이미지를 만들거나 장문의 텍스트를 써야 했죠.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ─────────────────────────────────── -->
+  <section id="features">
+    <div class="container">
+      <div class="features-header">
+        <div class="tag">✅ moa의 해결책</div>
+        <h2 class="section-title">필요한 건 전부 여기 있어요</h2>
+        <p class="section-sub" style="margin: 12px auto 0;">
+          복잡하고 귀찮은 팀 운영의 모든 과정을 moa가 해결합니다.
+        </p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">⚡</div>
+          <h3>1초 자동 라인업 배정</h3>
+          <p>
+            버튼 하나로 끝. 누적 출전 횟수가 적은 선수와 선호 포지션을 자동으로 계산해
+            11명 전원을 최적으로 배치해 드립니다.
+          </p>
+          <span class="feature-label">↳ 매 쿼터마다 적용 가능</span>
+        </div>
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">⚖️</div>
+          <h3>공정한 출전 시간 관리</h3>
+          <p>
+            선수별 누적 쿼터 수를 항상 추적합니다. 대기 명단에서 출전이 적은 선수를
+            한눈에 파악해 "나만 못 뛰었어"라는 말을 영원히 없애세요.
+          </p>
+          <span class="feature-label">↳ 쿼터·전후반 모두 지원</span>
+        </div>
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">🏟️</div>
+          <h3>인터랙티브 전술판</h3>
+          <p>
+            유니폼 아이콘을 드래그 앤 드롭으로 자유롭게 배치. 5:5 풋살부터 11:11 정식
+            축구까지, 11가지 포지션을 지원하는 정교한 포메이션 에디터.
+          </p>
+          <span class="feature-label">↳ 60FPS 부드러운 조작</span>
+        </div>
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">📸</div>
+          <h3>고화질 라인업 이미지 공유</h3>
+          <p>
+            완성된 라인업을 탭 한 번에 고화질 PNG로 저장. 카카오톡 단체방에 바로
+            공유하면 팀원들이 경기 전부터 설레기 시작합니다.
+          </p>
+          <span class="feature-label">↳ 3배 해상도 고화질 출력</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── JOIN / CTA ───────────────────────────────── -->
+  <section id="join">
+    <div class="container">
+      <div class="join-header">
+        <div class="tag">🤝 함께 만들어가요</div>
+        <h2 class="section-title">moa에 관심 있으신가요?</h2>
+        <p class="section-sub" style="margin: 12px auto 0;">
+          투자, 협업, 또는 팀 합류에 관심 있으시다면 아래 버튼으로 문의해 주세요.
+          빠르게 회신드리겠습니다.
+        </p>
+      </div>
+
+      <div class="join-cards">
+
+        <div class="join-card fade-in">
+          <span class="join-icon">💼</span>
+          <h3>투자자 / 파트너사</h3>
+          <p>
+            moa의 성장 가능성에 관심 있으신 투자자분 또는 스포츠·스타트업 분야 협업을
+            원하시는 파트너사의 문의를 환영합니다.
+          </p>
+          <a href="mailto:rhtmddbs11@gmail.com?subject=moa%20투자%2F파트너십%20문의&body=안녕하세요%2C%20moa에%20관심이%20있어%20연락드립니다.%0A%0A소속%3A%0A문의%20내용%3A"
+             class="btn-email btn-email-primary">
+            ✉️ 투자 · 파트너십 문의
+          </a>
+        </div>
+
+        <div class="join-card fade-in">
+          <span class="join-icon">👋</span>
+          <h3>moa가 마음에 드셨나요?</h3>
+          <p>
+            관심이 생기셨다면 언제든 연락 주세요.<br>
+            같이 무언가 만들어볼 수 있는 분이라면 환영이에요.
+          </p>
+          <a href="mailto:rhtmddbs11@gmail.com?subject=moa%20관심%20있어요!&body=안녕하세요%2C%20moa%20서비스를%20보고%20연락드립니다.%0A%0A이름%3A%0A하고%20싶은%20말%3A"
+             class="btn-email btn-email-secondary">
+            ✉️ 연락해보기
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+
+        <div>
+          <a href="#hero" class="footer-logo">
+            <img
+              src="images/logo.svg"
+              alt="moa 로고"
+              style="width:30px;height:30px;border-radius:8px;object-fit:cover;"
+            />
+            <span class="footer-brand">moa</span>
+          </a>
+          <p style="font-size:0.8rem;color:#64748b;margin-top:8px;max-width:260px;line-height:1.6;">
+            아마추어 축구/풋살 팀 운영진을 위한<br>스마트 스쿼드 매니저
+          </p>
+        </div>
+
+        <div class="footer-store-btns">
+          <a href="https://apps.apple.com/kr/app/moa/id6758687299"
+             class="footer-store-btn"
+             target="_blank" rel="noopener">
+            &#63743; App Store
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.moasoccer.lineup"
+             class="footer-store-btn"
+             target="_blank" rel="noopener">
+            &#9654; Google Play
+          </a>
+          <a href="https://moasoccer.vercel.app/"
+             class="footer-store-btn"
+             target="_blank" rel="noopener"
+             style="border-color:rgba(59,130,246,0.3);color:#60a5fa;">
+            🌐 웹 버전
+          </a>
+        </div>
+
+      </div>
+
+      <hr class="footer-divider" />
+
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2025 moa. All rights reserved.</p>
+        <a href="mailto:rhtmddbs11@gmail.com"
+           style="font-size:0.8rem;color:#64748b;text-decoration:none;transition:color 0.2s;"
+           onmouseover="this.style.color='#94a3b8'"
+           onmouseout="this.style.color='#64748b'">
+          rhtmddbs11@gmail.com
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── 모바일 메뉴 토글
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const isOpen = menu.style.display === 'flex';
+      menu.style.display = isOpen ? 'none' : 'flex';
+    }
+
+    // ── IntersectionObserver : 스크롤 시 fade-in 애니메이션
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // 한 번만 실행
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+  </script>
+
 </body>
 </html>
